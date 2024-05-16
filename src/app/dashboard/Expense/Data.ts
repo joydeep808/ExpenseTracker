@@ -1,0 +1,21 @@
+export const Data= [
+  "Food & Dining",
+  "Groceries",
+  "Transportation",
+  "Housing & Rent",
+  "Utilities (Electricity, Water, Gas)",
+  "Health & Medical",
+  "Insurance (Health, Life, Vehicle)",
+  "Entertainment",
+  "Shopping",
+  "Personal Care & Beauty",
+  "Education",
+  "Travel",
+  "Gifts & Donations",
+  "Investments",
+  "Debt Payments",
+  "Pets",
+  "Friends and Family",
+  "Miscellaneous",
+  "Others"
+]

@@ -1,0 +1,6 @@
+add filter option to filter out by category 
+Add  monthly limit  additionally when the month changes than only user able to add monthly limit
+add charts option 
+user able to edit the info in expense 
+user able to delete delete expense
+fix login issue ->
