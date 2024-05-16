@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { RegisterUserInDB } from "./RegisterUser";
 import { Card } from "@/components/ui/card";
-import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 function Page() {
   const navigate = useRouter()
