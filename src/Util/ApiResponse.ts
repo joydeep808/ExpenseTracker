@@ -22,14 +22,17 @@ export class ApiResponse<T = any>{
 
     },{status:this.statusCode})
   }
-  response(){
-    return {
+  response(){ 
+    const data =  {
       statusCode:this.statusCode,
       message:this.message,
       success : this.success,
       data:this.data,
 
     }
+    const j = JSON.stringify(data)
+    const parse = JSON.parse(j)
+    return parse
   }
 }
 

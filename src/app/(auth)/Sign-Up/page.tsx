@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { RegisterUserInDB } from "./RegisterUser";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Page() {
   const navigate = useRouter()
@@ -35,7 +36,7 @@ function Page() {
    const Response = await RegisterUserInDB(values)
    if (Response.success ) {
       toast.success(Response.message)
-      navigate.push("/")
+      // navigate.push("/sign-in")
    }
    else {
       toast.error(Response.message)
@@ -44,75 +45,120 @@ function Page() {
   }
   return (
     <>
-    <Card  className="grid items-center justify-center ">
+    <div className="flex items-center justify-center mt-28">
+    <Card className="w-[450px]  ">
+    <CardHeader>
+        <CardTitle>Sign Up Now</CardTitle>
+      </CardHeader>
+    <CardContent>
+      
+        <Form {...form}>
 
-<Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 grid items-center justify-center">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid w-full items-center gap-4  ">
+          <FormField
+          control={form.control}
+          name="email"
+          
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Enter your email</FormLabel>
+              <FormControl>
+              </FormControl>
+              <div className="flex flex-col space-y-1.5">
+              <Input {...field} type="email" id="email" placeholder="example@gmail.com " />
+              </div>
+              <FormMessage />
+                
+            </FormItem>
+          )}
+        />
+
+            {/* <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="expenceMoney">expenceMoney</Label>
+             
+            </div> */}
+            <FormField
+          control={form.control}
+          name="phone"
+          
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Enter your phone</FormLabel>
+              <FormControl>
+              </FormControl>
+              <div className="flex flex-col space-y-1.5">
+              <Input {...field} type="phone" id="phone" placeholder="8888888888" />
+              
+                </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+            {/* <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="catrgory">catrgory</Label>
+              <Select>
+                <SelectTrigger id="catrgory">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                {Data.map((item ,index)=>(
+                  <div key={index}>
+                  <SelectItem value={item}>{item}</SelectItem>
+                  </div>
+                ))}
+                </SelectContent>
+              </Select>
+            </div> */}
+
+
+
+<FormField
+          control={form.control}
+          name="password"
+          
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Enter your password</FormLabel>
+              <FormControl>
+              </FormControl>
+              <div className="flex flex-col space-y-1.5">
+
+              <Input {...field} type="password" id="password" placeholder="**********" />
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
+          
           render={({ field }) => (
             <FormItem>
-              <FormLabel>name</FormLabel>
+              <FormLabel>Enter your name </FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
               </FormControl>
-            
+              <div className="flex flex-col space-y-1.5">
+              <Input {...field} type="text" id="name" placeholder="John Doe" />
+              </div>
               <FormMessage />
             </FormItem>
-            
           )}
         />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>email</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-             
-              <FormMessage />
-            </FormItem>
-            
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>password</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-             
-              <FormMessage />
-            </FormItem>
-            
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>phone</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field}   />
-              </FormControl>
-             
-              <FormMessage />
-            </FormItem>
-            
-          )}
-        />
-        
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+          </div>
+        {/* <Button variant="outline">Cancel</Button> */}
+       <div className="flex gap-6 mt-6 justify-between">
+       <Button className=" px-10 py-4" type="submit">Register now</Button>
+       <Link href="/sign-in"><Button className=" px-10 py-4" type="submit">Login now</Button></Link>
+       </div>
+        </form>
+      </Form>
+      </CardContent>
+      
+
     </Card>
+    </div>
     </>
   )
 }
