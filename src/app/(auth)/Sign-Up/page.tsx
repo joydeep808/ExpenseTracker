@@ -36,7 +36,7 @@ function Page() {
    const Response = await RegisterUserInDB(values)
    if (Response.success ) {
       toast.success(Response.message)
-      // navigate.push("/sign-in")
+      navigate.push("/sign-in")
    }
    else {
       toast.error(Response.message)
