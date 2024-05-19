@@ -27,6 +27,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ChangePasswordAction } from "./ForgotPassword";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/ui/spinner";
  
 const Page = () => {
   const [isLoading , setisLoading]= useState(false)
