@@ -10,27 +10,53 @@ export interface IExpense {
   createdAt:string
   updatedAt:string
 }
-
+export type TExpenseCategoryDetails = {
+  expenseCategory:string,
+  addedCategory:number
+} 
 type store = {
   Expenses:IExpense[]
   alreadyFetched:boolean
+  categoryDetails:TExpenseCategoryDetails[]
+  totalCategoryItem:number
+  FilterExpense:IExpense[]
 }
 type actions = {
-  addExpenses :(Expense:IExpense[])=> void
+  addExpenses:(Expense:IExpense[])=> void
   changeAlreadyFetched:()=>void
+  addCategoryDetails:(Expense:TExpenseCategoryDetails[])=> void
+  addTotalCategoryItem:(item:number)=>void
+  addFilterExpenses:(Expense:IExpense[])=> void
+
 }
 
 
 export const useStore = create<store & actions>((set)=>({
   Expenses:[],
   alreadyFetched:false,
+totalCategoryItem:0,
+FilterExpense:[],
+  categoryDetails:[],
   addExpenses:(Expense:IExpense[])=>set((state)=>({
     Expenses:[
       ...state.Expenses,
       ...Expense
-    ]
+    ],
   })),
   changeAlreadyFetched:()=>set(()=>({
     alreadyFetched:true
-  }))
+  })),
+  addTotalCategoryItem:(item:number)=>set(()=>({
+    totalCategoryItem:item
+      })),
+  addCategoryDetails:(Expense:TExpenseCategoryDetails[])=>set((prev)=>({
+    categoryDetails:[
+      ...prev.categoryDetails,
+      ...Expense
+    ]
+  })),
+   addFilterExpenses:(Expense:IExpense[])=>set((prev)=>({
+    FilterExpense:[...Expense]
+   }))
+  
 }))

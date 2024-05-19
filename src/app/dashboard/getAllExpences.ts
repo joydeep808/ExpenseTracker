@@ -9,8 +9,9 @@ import { ApiResponse, InternalServerError, UnauthorizedAccessResponse } from "@/
 import { Expense } from "@/models/Expence"
 import { auth } from "@/auth"
 import { IExpense } from "@/app/Store"
+import { TRegistrationResponse } from "@/types/index.types"
 
-export async function getAllExpences (){
+export async function getAllExpences ():Promise<TRegistrationResponse>{
   try {
   const User = await auth()
    if (!User) {
@@ -25,7 +26,26 @@ export async function getAllExpences (){
   return new ApiResponse(404 , "Expences found", true , refineObjects).response()
 
   }  catch (error) {
-    console.log(error)
-      await InternalServerError()
+    return new ApiResponse(500 ,"We are facing some problems" ,false).response()
+  
+  }
+}
+
+
+
+
+export const getFilterExpense = async(FilterValue:string ):Promise<TRegistrationResponse>=>{
+  try {
+    const User = await auth()
+     if (!User) {
+     return await UnauthorizedAccessResponse()
+     }
+     await DBConnection()
+     const FilteredExpenses = await Expense.find({$and:[{user:User.user.email} , {expenseCategory:FilterValue}]})
+     if (!FilteredExpenses) return new ApiResponse(404 , `No Expense found realted ${FilterValue}` , false ).response()
+      else return new ApiResponse(200 , "Expenses successfully done!" , true , FilteredExpenses).response()
+  } catch (error) {
+    if (error instanceof Error) return new ApiResponse(500 , error.message , false).response()
+    else return new ApiResponse(500 , "We are facing server issue" , false).response()
   }
 }

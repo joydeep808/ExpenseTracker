@@ -25,13 +25,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ChangePasswordAction } from "./ForgotPassword";
+import toast from "react-hot-toast";
  
 const Page = () => {
 const form = useForm<z.infer<typeof ZForgotPasswordSchema>>({
   resolver:zodResolver(ZForgotPasswordSchema)
 })
-const onSubmit = ()=>{
-
+const onSubmit = async(values:z.infer<typeof ZForgotPasswordSchema>)=>{
+const Response =  await ChangePasswordAction(values.identifier)
+if (!Response.success) toast.error(Response.message)
+else toast.success(Response.message)
 }
 
 

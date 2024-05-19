@@ -1,2 +1,29 @@
-// in signup i have to add otp or link to verify the user 
+
+// Filter category 
+ --> When a user select or change category and user have to click on the search than only filtered values are shown
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Date Range for filter purpose
+// Split expense by category
+
+// generate the link to verify the email when user signup in our page  
+// fotgot password
 // also want to create email verify page
+
+
+// i have to create a circul for that i have the data 
+// suppose friends = 5T , Shopping = 3 
+
+
+
