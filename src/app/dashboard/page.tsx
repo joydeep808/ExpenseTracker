@@ -110,12 +110,12 @@ import { Data } from './Expense/Data'
     </div>
     <Button onClick={HandleFilter}>{isFilter? "Clear Filter ":'Filter now '}</Button>
     {isFetched ? <>
-      {isFilter ? <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>You havn't add this category expenses</h1>:FilterExpense.map((item , index)=>(
+      {isFilter ? <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>Expense not added in this category</h1>:FilterExpense.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
-      ))}</div>: <div className='ExpenseCard'>{Expenses.length === 0?<h1>You havn't add any expense till now</h1> :Expenses.map((item , index)=>(
+      ))}</div>: <div className='ExpenseCard'>{Expenses.length === 0?<h1>No expense found please add one</h1> :Expenses.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
       ))}</div>}
-    </>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((item , index)=>(
+    </>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((_ , index)=>(
        <Loading key={index}/> 
     ))}</div> }
 

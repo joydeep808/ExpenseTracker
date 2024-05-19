@@ -23,7 +23,7 @@ return (
             </div>
             <div className="flex justify-between">
                 <b>Date</b>
-                <span>{createdAt}</span>
+                <span>{new Date(createdAt).toLocaleDateString()}</span>
             </div>
             <div className="flex justify-between">
                 <b>Amount</b>

@@ -20,7 +20,7 @@ export const ShowExpenses:React.FC<ShowExpensesProps> = ({Expenses})=>{
    </div>
   ))}
 
-</>:"You havn't add any expense"}
+</>:"Add one expense "}
     </div>
     </>
   )
