@@ -24,7 +24,6 @@ import { Data } from './Expense/Data'
   const [isFilter , setIsFilter] = useState(false)
   const [isFetched , setIsFetched] = useState(false)
   const [filterValue , setFilterValue]  = useState("")
-
   const [FilterChangeValue , setFilterChangeValue] = useState("")
   useEffect(()=>{
    try {
@@ -50,12 +49,13 @@ import { Data } from './Expense/Data'
            }
              
            })
+          changeAlreadyFetched(true)
          await addCategoryDetails(arr)
          setIsFetched(true)
          }
        }
        fetchAllExpences()
-       changeAlreadyFetched()
+      //  changeAlreadyFetched(true)
      }
    } catch (error) {
     
@@ -71,7 +71,7 @@ import { Data } from './Expense/Data'
     if (filterValue === FilterChangeValue) return
     if (filterValue !== FilterChangeValue && isFilter === true) {
       try {
-        setIsFetched(false)
+        changeAlreadyFetched(false)
 
         const Response =await getFilterExpense(FilterChangeValue)
         console.log(Response)
@@ -79,12 +79,17 @@ import { Data } from './Expense/Data'
         else {
       toast.success(Response.message)
       await addFilterExpenses(Response.data)
+      changeAlreadyFetched(true)
+
       setIsFetched(true)
+
       }
       } catch (error) {
         toast.error("Error while fetching the filtered data")
       }
       finally{
+      changeAlreadyFetched(true)
+
       }
     }
     } 
@@ -109,7 +114,7 @@ import { Data } from './Expense/Data'
 </Select>
     </div>
     <Button onClick={HandleFilter}>{isFilter? "Clear Filter ":'Filter now '}</Button>
-    {isFetched ? <>
+    {alreadyFetched ? <>
       {isFilter ? <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>Expense not added in this category</h1>:FilterExpense.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
       ))}</div>: <div className='ExpenseCard'>{Expenses.length === 0?<h1>No expense found please add one</h1> :Expenses.map((item , index)=>(

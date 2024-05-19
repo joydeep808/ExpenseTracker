@@ -9,7 +9,7 @@ interface expenseDetails{
 
 
 export const  ExpenseCard:React.FC<expenseDetails> = (props:expenseDetails)=>{
-    const {description , createdAt , expenseCategory , expenseMoney , isMoneyRefundable , updatedAt , user , _id} = props.Expenses
+    const {createdAt , expenseCategory , expenseMoney } = props.Expenses
 return (
     <div className="container w-[350px] min-h-fit rounded-xl shadow-xl p-8 flex flex-col"> 
     <div className="border-b-2 border-dotted border-slate-300 pb-2">

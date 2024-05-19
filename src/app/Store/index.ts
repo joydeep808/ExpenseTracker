@@ -23,7 +23,7 @@ type store = {
 }
 type actions = {
   addExpenses:(Expense:IExpense[])=> void
-  changeAlreadyFetched:()=>void
+  changeAlreadyFetched:(status:boolean)=>void
   addCategoryDetails:(Expense:TExpenseCategoryDetails[])=> void
   addTotalCategoryItem:(item:number)=>void
   addFilterExpenses:(Expense:IExpense[])=> void
@@ -43,8 +43,8 @@ FilterExpense:[],
       ...Expense
     ],
   })),
-  changeAlreadyFetched:()=>set(()=>({
-    alreadyFetched:true
+  changeAlreadyFetched:(status:boolean)=>set(()=>({
+    alreadyFetched:status
   })),
   addTotalCategoryItem:(item:number)=>set(()=>({
     totalCategoryItem:item
