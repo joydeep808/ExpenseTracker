@@ -19,8 +19,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 function Page() {
+  const [isLoading , setisLoading] = useState(false)
   const navigate = useRouter()
   const form= useForm<z.infer<typeof ZUserRegistrationSchema>>({
     resolver:zodResolver(ZUserRegistrationSchema),
@@ -33,15 +36,25 @@ function Page() {
   })
   
  async function onSubmit (values:z.infer<typeof ZUserRegistrationSchema>){
-   const Response = await RegisterUserInDB(values)
-   if (Response.success ) {
-      toast.success(Response.message)
-      navigate.push("/sign-in")
+   try {
+    setisLoading(true)
+    const Response = await RegisterUserInDB(values)
+    if (Response.success ) {
+       toast.success(Response.message)
+       navigate.push("/sign-in")
+    }
+    else {
+       toast.error(Response.message)
+    }
+    
+   } catch (error) {
+    toast.error("An unknown error ")
+    setisLoading(false)
    }
-   else {
-      toast.error(Response.message)
+   finally{
+    setisLoading(false)
+
    }
-   
   }
   return (
     <>
@@ -95,24 +108,6 @@ function Page() {
             </FormItem>
           )}
         />
-            {/* <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="catrgory">catrgory</Label>
-              <Select>
-                <SelectTrigger id="catrgory">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                {Data.map((item ,index)=>(
-                  <div key={index}>
-                  <SelectItem value={item}>{item}</SelectItem>
-                  </div>
-                ))}
-                </SelectContent>
-              </Select>
-            </div> */}
-
-
-
 <FormField
           control={form.control}
           name="password"
@@ -150,7 +145,7 @@ function Page() {
         {/* <Button variant="outline">Cancel</Button> */}
        <div className="flex gap-6 mt-6 justify-between">
        <Button className=" px-10 py-4" type="submit">Register now</Button>
-       <Link href="/sign-in"><Button className=" px-10 py-4" type="submit">Login now</Button></Link>
+       <Link href="/sign-in"><Button className=" px-10 py-4" type="submit"disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "Register now"}</Button></Link>
        </div>
         </form>
       </Form>

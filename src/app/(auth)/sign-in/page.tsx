@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner"
 import { signInSchema } from "@/schemas/LoginSchema"
 import { ZUserRegistrationSchema } from "@/schemas/User"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,11 +15,13 @@ import { signIn } from "next-auth/react"
 // import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { z } from "zod"
  function Page() {
   const navigate = useRouter()
+  const [isLoading , setisLoading] = useState(false)
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver:zodResolver(signInSchema),
     defaultValues:{
@@ -31,6 +34,7 @@ import { z } from "zod"
   //  console.log(result)
     // fetch("")
  try {
+  setisLoading(true)
  const result =  await signIn("credentials" , {
       redirect:false,
       identifier:values.identifier,
@@ -46,7 +50,12 @@ import { z } from "zod"
     navigate.push("/dashboard")
    }
  } catch (error) {
+  setisLoading(false)
   console.log("error",error )
+ }
+ finally
+ {
+  setisLoading(false)
  }
     // 
   }
@@ -83,7 +92,7 @@ import { z } from "zod"
               </FormItem>
             )}
           />
-          <Button className='w-full' type="submit">Sign In</Button>
+          <Button className='w-full' type="submit" disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "login now"}</Button>
         </form>
       </Form>
       <div className="text-end mt-4">

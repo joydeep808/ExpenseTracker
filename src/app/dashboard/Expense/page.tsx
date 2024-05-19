@@ -23,36 +23,46 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { addExpence } from "./ServerAction/AddExpenceInServer"
 import toast from "react-hot-toast"
 import Link from "next/link"
+import { useState } from "react"
+import { Spinner } from "@/components/ui/spinner"
 function Page() {
+  const [isLoading , setisLoading] = useState(false)
 
   const form = useForm<z.infer<typeof ZExpenseSchema>>({
     resolver:zodResolver(ZExpenseSchema)
   })
 
   async function onSubmit(formData:z.infer<typeof ZExpenseSchema>){
-    const money = Number.parseInt(formData.expenseMoney)
-    if (money<= 0) {
-      form.setError("expenseMoney",{
-        message:"Expense money should not be lesserthan 0",
-        type:"valueAsNumber"
-      })
-      // toast.error("Expense money not lesster than or equal of 0")
-      
+    try {
+      setisLoading(true)
+      const money = Number.parseInt(formData.expenseMoney)
+      if (money<= 0) {
+        form.setError("expenseMoney",{
+          message:"Expense money should not be lesserthan 0",
+          type:"valueAsNumber"
+        })
+        
+      }
+     else{
+      const Response = await addExpence(formData)
+      if (!Response.success) {
+        toast.error(Response.message)
+      }
+      else {
+        toast.success(Response.message)
+        
+      }
+     }
+    } catch (error) {
+      toast.error("An unknown error comes")
     }
-   else{
-    const Response = await addExpence(formData)
-    if (!Response.success) {
-      toast.error(Response.message)
+    finally{
+      setisLoading(false)
     }
-    else {
-      toast.success(Response.message)
-      
-    }
-   }
   }
   return (
     <>
-  <Link href={"/dashboard"}>Go To Expences</Link>
+  <Button><Link href={"/dashboard"}>Go To Expences</Link></Button>
   
  <Card className="w-[350px]">
       <CardHeader>
@@ -175,7 +185,7 @@ function Page() {
         />
           </div>
         {/* <Button variant="outline">Cancel</Button> */}
-        <Button className="mt-6 px-14 py-4" type="submit">Add</Button>
+        <Button className="mt-6 px-14 py-4" type="submit" disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "Add"}</Button>
         </form>
       </Form>
       </CardContent>

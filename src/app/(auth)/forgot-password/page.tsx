@@ -2,7 +2,7 @@
 
 import { ZForgotPasswordSchema } from "@/schemas/ForgotPassword.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react"
+import React, { useState } from "react"
 import {  useForm } from 'react-hook-form';
 import { z } from "zod";
  
@@ -29,13 +29,24 @@ import { ChangePasswordAction } from "./ForgotPassword";
 import toast from "react-hot-toast";
  
 const Page = () => {
+  const [isLoading , setisLoading]= useState(false)
 const form = useForm<z.infer<typeof ZForgotPasswordSchema>>({
   resolver:zodResolver(ZForgotPasswordSchema)
 })
 const onSubmit = async(values:z.infer<typeof ZForgotPasswordSchema>)=>{
-const Response =  await ChangePasswordAction(values.identifier)
-if (!Response.success) toast.error(Response.message)
-else toast.success(Response.message)
+try {
+  setisLoading(true)
+  const Response =  await ChangePasswordAction(values.identifier)
+  if (!Response.success) toast.error(Response.message)
+  else toast.success(Response.message)
+
+} catch (error) {
+  toast.error("An unknown error")
+  setisLoading(false)
+}
+finally{
+  setisLoading(false)
+}
 }
 
 
@@ -67,7 +78,7 @@ else toast.success(Response.message)
           )}
         />
           </div>
-          <Button className='w-full' type="submit">Sign In</Button>
+          <Button className='w-full' type="submit"disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "Reset Password"} </Button>
         </form>
         </Form>
       </CardContent>

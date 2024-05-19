@@ -21,7 +21,7 @@ export const ChangePasswordAction = async(identifier:string):Promise<TRegistrati
   const payload = jsonwebtoken.sign({id:foundUser._id ,expiresAt , token} , process.env.AUTH_SECRET) 
    foundUser.forgotPasswordOTP = token
    await foundUser.save({validateBeforeSave:false})
-  await forgotPasswordWorker({email:foundUser.email , name:foundUser.name , resetLink:`http://localhost:3000/forgot-password/${payload}`})
+  await forgotPasswordWorker({email:foundUser.email , name:foundUser.name , resetLink:payload})
   return new ApiResponse(200 , "Email send successfully done" , true).response()
 }
 

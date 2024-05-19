@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { ShowExpenses } from './ui'
 import { ExpenseCard } from './ui/Expense'
 import Loading from '@/components/ui/Loading'
+import { Data } from './Expense/Data'
  function Page() {
   const {Expenses,alreadyFetched , changeAlreadyFetched, addExpenses , addCategoryDetails ,addTotalCategoryItem , totalCategoryItem,  categoryDetails , FilterExpense , addFilterExpenses} = useStore()
   const [isFilter , setIsFilter] = useState(false)
@@ -94,22 +95,24 @@ import Loading from '@/components/ui/Loading'
   }
   return (
     <>
+    <div className='flex gap-4'>
     <Button><Link href={"/dashboard/Expense"}>Add Expense</Link></Button>
     <Select onValueChange={(e)=>setFilterChangeValue(e)}>
   <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Category" />
   </SelectTrigger>
   <SelectContent>
-    <SelectItem value="Food & Dining">Food & Dining</SelectItem>
-    <SelectItem value="Health & Medical">Health & Medical</SelectItem>
-    <SelectItem value="Investments">Investments</SelectItem>
+    {Data.map((item , index)=>(
+      <SelectItem key={index} value={item}>{item}</SelectItem>
+    ))}
   </SelectContent>
 </Select>
+    </div>
     <Button onClick={HandleFilter}>{isFilter? "Clear Filter ":'Filter now '}</Button>
     {isFetched ? <>
-      {isFilter ? <div className='ExpenseCard'>{FilterExpense.map((item , index)=>(
+      {isFilter ? <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>You havn't add this category expenses</h1>:FilterExpense.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
-      ))}</div>: <div className='ExpenseCard'>{Expenses.map((item , index)=>(
+      ))}</div>: <div className='ExpenseCard'>{Expenses.length === 0?<h1>You havn't add any expense till now</h1> :Expenses.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
       ))}</div>}
     </>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((item , index)=>(

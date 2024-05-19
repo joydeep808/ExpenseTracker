@@ -8,11 +8,14 @@ import { User } from "@/models/User"
 import type { RegisterUser } from "@/types/TRegistration"
 import { TRegistrationResponse } from "@/types/index.types"
 import { hashSync } from "bcrypt"
+import { NextRequest } from "next/server"
 
 
 
 
 export const RegisterUserInDB = async(values:RegisterUser):Promise<TRegistrationResponse>=>{
+  const Req = NextRequest
+  console.log(Req)
   try {
     await DBConnection()
     const {email , name , password , phone}= values
@@ -23,11 +26,9 @@ export const RegisterUserInDB = async(values:RegisterUser):Promise<TRegistration
        phone,
        password:hashPassword
     })
+    // TODO: account verify option or send the email to verify the account
    try {
     const user =  await newUser.save()
-    const otp = String(OTPGeneration())
-    // await sendEmail(user.email , user.name ,user.name)
-    // await OTPVerificationWorker(user.email , user.name , otp)
     await WelcomeMessageWorker(user.name , user.email)
      return new ApiResponse(200 , "User create successfully done!" ,true , user ).response()
    } catch (error:any) {
