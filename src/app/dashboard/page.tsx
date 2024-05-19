@@ -62,19 +62,13 @@ import Loading from '@/components/ui/Loading'
    finally{
    }
   },[])
-  // i have to add useEffect for this
-  // and the logic will be whenerver the value changes or 
-  // const [isFilter , setIsFilter] = useState(false)
-  // const [isFetched , setIsFetched] = useState(false)
-  // const [filterValue , setFilterValue]  = useState("")
-
-  // const [FilterChangeValue , setFilterChangeValue] = useState("")
+ 
   useEffect(()=>{
     async function getSometing(){
       
       if (!filterValue  && !FilterChangeValue) return
     if (filterValue === FilterChangeValue) return
-    if (filterValue !== FilterChangeValue) {
+    if (filterValue !== FilterChangeValue && isFilter === true) {
       try {
         setIsFetched(false)
 
@@ -84,22 +78,17 @@ import Loading from '@/components/ui/Loading'
         else {
       toast.success(Response.message)
       await addFilterExpenses(Response.data)
+      setIsFetched(true)
       }
       } catch (error) {
         toast.error("Error while fetching the filtered data")
       }
       finally{
-        setIsFetched(false)
       }
     }
     } 
     getSometing()
-  }, [FilterChangeValue])
-
-
-
-
-
+  }, [FilterChangeValue , isFilter ] )
   const HandleFilter = async()=>{
     setIsFilter(prev=>!prev)
   }
@@ -116,12 +105,16 @@ import Loading from '@/components/ui/Loading'
     <SelectItem value="Investments">Investments</SelectItem>
   </SelectContent>
 </Select>
-    <Button onClick={HandleFilter}>click me to filter</Button>
-    {isFetched ? <div className='ExpenseCard'>
-      {Expenses.map((item , index)=>(
+    <Button onClick={HandleFilter}>{isFilter? "Clear Filter ":'Filter now '}</Button>
+    {isFetched ? <>
+      {isFilter ? <div className='ExpenseCard'>{FilterExpense.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
-      ))}
-    </div>: <Loading/>  }
+      ))}</div>: <div className='ExpenseCard'>{Expenses.map((item , index)=>(
+        <ExpenseCard Expenses={item} key={index}/>
+      ))}</div>}
+    </>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((item , index)=>(
+       <Loading key={index}/> 
+    ))}</div> }
 
    
     </>

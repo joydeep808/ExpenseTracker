@@ -29,10 +29,10 @@ return (
                 <b>Amount</b>
                 <span>₹{expenseMoney}</span>
             </div>
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
                 <b>Description</b>
                 <p className="text-justify">{description}</p>
-            </div>
+            </div> */}
         </div> 
     </Suspense>
 </div>
