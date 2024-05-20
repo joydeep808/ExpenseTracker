@@ -5,23 +5,28 @@
 import { DBConnection } from "@/DB";
 import { ApiResponse } from "@/Util/ApiResponse";
 import { auth } from "@/auth";
+import { RedisClient, RedisHandler } from "@/helpers/Ratelimit";
 import { Expense } from "@/models/Expence";
 import { ZExpenseSchema } from "@/schemas/Expence.Schema";
 import { z } from "zod";
 export async function addExpence (data:z.infer<typeof ZExpenseSchema>){
-  console.log(data)
-  await DBConnection();
-  const Userauth = await auth()
-  if (!Userauth) return new ApiResponse(401 , "Unauthorize access" , false).response()
+  const Checkuser  =  await RedisHandler()
+  if (Checkuser.success === false){
+   if (Checkuser.err ===  "Invalid user") return new ApiResponse(401 , "Please login" ,false).response()
+   else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
+  } 
+  const UserAuth = Checkuser.userAuth?.user
+  await DBConnection()
   try {
     const newExpense = await Expense.create({
-      user:Userauth.user.email,
+      user:UserAuth.email,
       expenseMoney:data.expenseMoney,
       expenseCategory:data.expenseCategory,
       isMoneyRefundable:data.isMoneyRefundable,
       description:data.description
     })
     await newExpense.save()
+    await RedisClient.expire(`user_${UserAuth.email}` , 1)
     return new ApiResponse(200 , "Expense saved successfully done" , true).response()
   } catch (error) {
     if (error instanceof Error) {

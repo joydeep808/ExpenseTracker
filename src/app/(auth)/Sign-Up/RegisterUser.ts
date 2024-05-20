@@ -15,7 +15,6 @@ import { NextRequest } from "next/server"
 
 export const RegisterUserInDB = async(values:RegisterUser):Promise<TRegistrationResponse>=>{
   const Req = NextRequest
-  console.log(Req)
   try {
     await DBConnection()
     const {email , name , password , phone}= values

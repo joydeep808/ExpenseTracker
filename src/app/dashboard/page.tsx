@@ -19,22 +19,28 @@ import { ShowExpenses } from './ui'
 import { ExpenseCard } from './ui/Expense'
 import Loading from '@/components/ui/Loading'
 import { Data } from './Expense/Data'
+import { useRouter } from "next/navigation"
+
+
  function Page() {
+  const Navigate = useRouter()
   const {Expenses,alreadyFetched , changeAlreadyFetched, addExpenses , addCategoryDetails ,addTotalCategoryItem , totalCategoryItem,  categoryDetails , FilterExpense , addFilterExpenses} = useStore()
   const [isFilter , setIsFilter] = useState(false)
   const [isFetched , setIsFetched] = useState(false)
   const [filterValue , setFilterValue]  = useState("")
   const [FilterChangeValue , setFilterChangeValue] = useState("")
   useEffect(()=>{
+
    try {
      if (alreadyFetched === true) return;
      else {
        const fetchAllExpences = async()=>{
          const allExpences = await getAllExpences()
-         console.log(allExpences)
+         
          if (!allExpences || !allExpences.success )  {
            toast.error(allExpences?.message || "Something went wrong")
          }
+         
          else{
            toast.success(allExpences.message)
            const FoundExpenses =await JSON.parse(allExpences.data)
@@ -76,7 +82,6 @@ import { Data } from './Expense/Data'
         changeAlreadyFetched(false)
 
         const Response =await getFilterExpense(FilterChangeValue)
-        console.log(Response)
         if (!Response.success)return toast.error(Response.message)
         else {
       toast.success(Response.message)

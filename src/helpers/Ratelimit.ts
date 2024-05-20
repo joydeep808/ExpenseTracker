@@ -8,6 +8,7 @@ import { auth } from '@/auth'
 
 
 import ioRedis, { Redis, RedisOptions } from 'ioredis'
+import { cookies } from 'next/headers'
 
 
 const Options:RedisOptions ={
@@ -36,7 +37,10 @@ try {
 
 export const RedisHandler = async()=>{
   const userAuth = await auth()
-  if (!userAuth || !userAuth.user || new Date(userAuth.expires) < new Date()) return {success:false , err:"Invalid user"}
+  if (!userAuth || !userAuth.user || new Date(userAuth.expires) < new Date()) {
+    await cookies().delete("__Secure-authjs.session-token")
+    return {success:false , err:"Invalid user"}
+  }
   const userKey =await userAuth.user.email
   console.log(userKey)
   const pipeline = RedisClient.pipeline();

@@ -32,11 +32,9 @@ export const checkTheRefreshToken = async(token:any)=>{
   if (foundUser.refreshToken === token.refreshToken) {
     
     if (new Date()> foundUser.refreshTokenExpiry) {
-      console.log("notissuesd")
       throw new Error("Refresh Token expired")
     }
    else  {
-    console.log("issuesd")
     const newToken =  {
       ...token,
       expiresAt:setAccessTokenExpires()

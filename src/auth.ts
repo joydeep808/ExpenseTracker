@@ -33,6 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       throw new Error("Password not valid ")
                         
                       }
+                      user.passwordTries -= 1
                       await user.save({validateBeforeSave:false})
                       throw new Error("Password not valid ")
                     }
@@ -40,15 +41,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       if (new Date() < user.refreshTokenExpiry) {
                         const newRefreshToken =   await createNewRefeshToken();
                         user.refreshToken = newRefreshToken;
+                        user.forgotPasswordTries = 5
+                        user.forgotPasswordStop = Date.now()
                         await user.save({validateBeforeSave:false})
                       }
                     }
                     if(!user.refreshToken){
                       const newRefreshToken =await createNewRefeshToken();
+                      user.forgotPasswordTries = 5
+                        user.forgotPasswordStop = Date.now()
                       user.refreshToken = newRefreshToken;
                       user.refreshTokenExpiry =setRefreshTokenExpiry()
                       await user.save({validateBeforeSave:false})
                     }
+
                     return user
                   } catch (error:any|Error ) {
                     if (error instanceof Error) {
