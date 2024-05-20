@@ -22,10 +22,10 @@ export async function getAllExpences ():Promise<TRegistrationResponse>{
    } 
    const User = Checkuser.userAuth?.user
    const redisPipeline =  RedisClient.pipeline();
-   const result  = await redisPipeline.get(`user_${User.email}`).exec();
-  const isExpensesFound =result &&  result[0][1] 
-   if (isExpensesFound !== null) {
-    return new ApiResponse(200 , "Expeses found from redis" , true , isExpensesFound).response()
+  await  redisPipeline.expire(`user_${User.email}` , 1).exec()
+   const result  = await RedisClient.get(`user_${User.email}`);
+   if (result !== null) {
+    return new ApiResponse(200 , "Expeses found from redis" , true , result).response()
    }
 
    await DBConnection()

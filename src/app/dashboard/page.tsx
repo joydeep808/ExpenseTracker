@@ -31,6 +31,7 @@ import { Data } from './Expense/Data'
      else {
        const fetchAllExpences = async()=>{
          const allExpences = await getAllExpences()
+         console.log(allExpences)
          if (!allExpences || !allExpences.success )  {
            toast.error(allExpences?.message || "Something went wrong")
          }

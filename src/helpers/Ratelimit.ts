@@ -37,24 +37,23 @@ try {
 export const RedisHandler = async()=>{
   const userAuth = await auth()
   if (!userAuth || !userAuth.user || new Date(userAuth.expires) < new Date()) return {success:false , err:"Invalid user"}
-  const userKey = userAuth.user.email
+  const userKey =await userAuth.user.email
+  console.log(userKey)
   const pipeline = RedisClient.pipeline();
- const result =await pipeline.get(userKey).exec()
- if (!result) return {success:false , err:"Redis error"}
- const foundUser = result[0][1] as number
+ const result =await RedisClient.get(userKey)
+ const foundUser = result
  if( foundUser === null) {
    pipeline.set(userKey , 1)
    pipeline.expire(userKey , 60)
    await pipeline.exec()
   return {success:null , userAuth}
  }
- if (foundUser > 20) {
+ if (Number(foundUser) > 20) {
   return {success:false , err:"Limit Excedeed" }
  }
  else {
-   pipeline.incrby(userKey , 1)
-   await pipeline.exec()
-  return {success:true,foundUser , userAuth}
+   await RedisClient.incrby(userKey , 1)
+  return {success:true, userAuth}
  }
 
 }
