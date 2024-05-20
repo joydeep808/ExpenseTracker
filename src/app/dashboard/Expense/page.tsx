@@ -62,7 +62,7 @@ function Page() {
   }
   return (
     <>
-  
+  <div className="flex items-center justify-center mt-28">
  <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Expence Tracker</CardTitle>
@@ -195,7 +195,7 @@ function Page() {
       
 
     </Card>
-
+    </div>
     </>
   )
 }
