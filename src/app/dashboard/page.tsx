@@ -20,6 +20,7 @@ import { ExpenseCard } from './ui/Expense'
 import Loading from '@/components/ui/Loading'
 import { Data } from './Expense/Data'
 import { useRouter } from "next/navigation"
+import { signOut } from 'next-auth/react'
 
 
  function Page() {
@@ -36,12 +37,16 @@ import { useRouter } from "next/navigation"
      else {
        const fetchAllExpences = async()=>{
          const allExpences = await getAllExpences()
-         
+         console.log(allExpences)
          if (!allExpences || !allExpences.success )  {
            toast.error(allExpences?.message || "Something went wrong")
+           if (allExpences.message === "Please login") {
+            Navigate.replace("/sign-in")
+          }
          }
          
          else{
+          
            toast.success(allExpences.message)
            const FoundExpenses =await JSON.parse(allExpences.data)
           addExpenses(FoundExpenses)

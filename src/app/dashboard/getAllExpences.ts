@@ -11,13 +11,19 @@ import { auth } from "@/auth"
 import { IExpense } from "@/app/Store"
 import { TRegistrationResponse } from "@/types/index.types"
 import { RedisClient, RedisHandler, setUserinRedis } from "@/helpers/Ratelimit"
+import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
 
 export async function getAllExpences ():Promise<TRegistrationResponse>{
   try {
     
   const Checkuser  =  await RedisHandler()
    if (Checkuser.success === false){
-    if (Checkuser.err ===  "Invalid user") return new ApiResponse(401 , "Please login" ,false).response()
+    if (Checkuser.err ===  "Invalid user"){
+      cookies().delete("__Secure-authjs.session-token")
+       
+       return new ApiResponse(401 , "Please login" ,false).response()
+      }
     else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
    } 
    const User = Checkuser.userAuth?.user

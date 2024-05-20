@@ -62,7 +62,6 @@ function Page() {
   }
   return (
     <>
-  <Button><Link href={"/dashboard"}>Go To Expences</Link></Button>
   
  <Card className="w-[350px]">
       <CardHeader>
@@ -185,7 +184,11 @@ function Page() {
         />
           </div>
         {/* <Button variant="outline">Cancel</Button> */}
-        <Button className="mt-6 px-14 py-4" type="submit" disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "Add"}</Button>
+        <div className="flex justify-between mt-6">
+  <Button ><Link href={"/dashboard"}>Go To Expences</Link></Button>
+        <Button className=" px-8 py-4" type="submit" disabled={isLoading ? true :false}>{isLoading ? <Spinner/>: "Add"}</Button>
+        </div>
+
         </form>
       </Form>
       </CardContent>
