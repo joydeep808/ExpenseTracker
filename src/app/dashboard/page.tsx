@@ -101,7 +101,7 @@ import { useRouter } from "next/navigation"
     }
     } 
     getSometing()
-  }, [FilterChangeValue , isFilter ] )
+  }, [FilterChangeValue , isFilter ])
   const HandleFilter = async()=>{
     setIsFilter(prev=>!prev)
   }
@@ -109,9 +109,9 @@ import { useRouter } from "next/navigation"
     <>
     <div className='flex gap-4'>
     <Button><Link href={"/dashboard/Expense"}>Add Expense</Link></Button>
-    <Select onValueChange={(e)=>setFilterChangeValue(e)}>
+    <Select onValueChange={(e)=>setFilterChangeValue(e)} defaultValue='Food & Dining'>
   <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Category" />
+    <SelectValue placeholder="Category" defaultValue={"Food & Dining"} />
   </SelectTrigger>
   <SelectContent>
     {Data.map((item , index)=>(
@@ -119,17 +119,26 @@ import { useRouter } from "next/navigation"
     ))}
   </SelectContent>
 </Select>
-    </div>
     <Button onClick={HandleFilter}>{isFilter? "Clear Filter ":'Filter now '}</Button>
+    </div>
     {alreadyFetched ? <>
-      {isFilter ? <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>Expense not added in this category</h1>:FilterExpense.map((item , index)=>(
+      {isFilter ? 
+      <div className='ExpenseCard'>{FilterExpense.length === 0 ? <h1>Expense not added in this category</h1>:FilterExpense.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
-      ))}</div>: <div className='ExpenseCard'>{Expenses.length === 0?<h1>No expense found please add one</h1> :Expenses.map((item , index)=>(
+      ))}</div>
+      :
+      <div className='ExpenseCard'>
+        {Expenses.length === 0 ?
+         <h1>No expense found please add one</h1> 
+         :
+         Expenses.map((item , index)=>(
         <ExpenseCard Expenses={item} key={index}/>
       ))}</div>}
-    </>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((_ , index)=>(
-       <Loading key={index}/> 
-    ))}</div> }
+    </>
+    :
+    <>{Expenses.length === 0 ? <h1>Please add an expense</h1>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((_ , index)=>(
+      <Loading key={index}/> 
+   ))}</div>}  </> }
 
    
     </>
