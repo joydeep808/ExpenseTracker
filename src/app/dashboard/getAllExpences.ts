@@ -10,19 +10,47 @@ import { Expense } from "@/models/Expence"
 import { auth } from "@/auth"
 import { IExpense } from "@/app/Store"
 import { TRegistrationResponse } from "@/types/index.types"
+import { RedisClient, RedisHandler, setUserinRedis } from "@/helpers/Ratelimit"
 
 export async function getAllExpences ():Promise<TRegistrationResponse>{
   try {
-  const User = await auth()
-   if (!User) {
-    await UnauthorizedAccessResponse()
+    
+  const Checkuser  =  await RedisHandler()
+   if (Checkuser.success === false){
+    if (Checkuser.err ===  "Invalid user") return new ApiResponse(401 , "Please login" ,false).response()
+    else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
+   } 
+   const User = Checkuser.userAuth?.user
+   const redisPipeline =  RedisClient.pipeline();
+   const result  = await redisPipeline.get(`user_${User.email}`).exec();
+  const isExpensesFound =result &&  result[0][1] 
+   if (isExpensesFound !== null) {
+    return new ApiResponse(200 , "Expeses found from redis" , true , isExpensesFound).response()
    }
+
    await DBConnection()
-  const allExpences = await Expense.find({user:User?.user.email}).sort("-1").limit(10)
+  const allExpences = await Expense.aggregate([
+    {
+      $match:{
+        user:User.email
+      }
+    },
+    {
+      $sort:{
+        createdAt:-1
+      }
+    },
+    {
+      $limit:10
+    }
+  ])
   if (allExpences.length === 0) {
     return new ApiResponse(404 , "No Expence found", false ).response()
   }
-  const refineObjects = JSON.parse(JSON.stringify(allExpences))
+  const refineObjects = JSON.stringify(allExpences)
+  redisPipeline.set(`user_${User.email}` , refineObjects)
+  redisPipeline.expire(`user_${User.email}` , 60)
+  await redisPipeline.exec()
   return new ApiResponse(404 , "Expences found", true , refineObjects).response()
 
   }  catch (error) {

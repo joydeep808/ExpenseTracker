@@ -8,8 +8,11 @@ export interface TUser {
   verificationOTP:string
   verificationOtpExpiry:number
   forgotPasswordOTP:string
+  forgotPasswordTries:number
+  forgotPasswordStop:number
   forgotPasswordExpiry:number
   passwordTries:number
+  invalidPasswordTries:number
   accountLockedTime:Date
   role:string[]
   refreshToken:string
@@ -30,6 +33,7 @@ const UserSchema = new Schema<TUser>({
   },
   phone:{
     type:"Number",
+    index:true,
     unique:true,
     required:true,
   },
@@ -53,9 +57,21 @@ const UserSchema = new Schema<TUser>({
   forgotPasswordExpiry:{
     type:Number
   },
+  forgotPasswordTries:{
+    type:Number,
+    default:0
+  },
+  forgotPasswordStop:{
+    type:Number,
+    default:Date.now()
+  },
   passwordTries:{
     type:Number,
     default:5
+  },
+  invalidPasswordTries:{
+    type:Number,
+    default:Date.now()
   },
   accountLockedTime:{
     type:Date

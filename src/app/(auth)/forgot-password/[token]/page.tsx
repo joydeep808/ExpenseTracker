@@ -7,12 +7,22 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form"
 import { z } from "zod";
-import { ChnageThePassword } from "../ForgotPassword";
+import { ChnageThePassword, isTokenValid } from "../ForgotPassword";
 import toast from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
  
 export default function Page({ params }: { params: { token: string } }) {
+  const navigate = useRouter()
+  useEffect(()=>{
+  async function checkTheToken(){
+  const isValid =  await isTokenValid(params.token)
+  if (!isValid) navigate.replace("/forgot-password")
+   }
+   checkTheToken()
+  },[])
   const ZforgotPassword = z.object({
     password:z.string().min(8 , "Minimum length should be 8")
   })

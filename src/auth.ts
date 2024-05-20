@@ -5,10 +5,6 @@ import { DBConnection } from "./DB"
 import { User } from "./models/User"
 import bcrypt from 'bcrypt'
 import { checkTheRefreshToken, createNewRefeshToken, setAccessTokenExpires, setRefreshTokenExpiry } from "./Util/AuthHelper"
-
-
-
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -20,11 +16,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           await DBConnection()
                   try {
                     const user = await User.findOne({
-                      email:credentials.identifier
+                        email:credentials.identifier
                     })
-                    if(!user) throw new Error("User not found with this details")
+                    if(!user) throw new Error("Email not register with us")
+                      if (user.passwordTries === 0 && user.invalidPasswordTries > Date.now()){
+                        const now = Date.now()
+                          const hour = (((user.invalidPasswordTries - now)/ 1000)/60 )
+                          throw new Error(`Please try again after ${(hour / 60).toPrecision(1)} hour`)
+                      }
                       const isPasswordValid = bcrypt.compareSync(credentials.password , user.password)
-                    if(!isPasswordValid)throw new Error("Password not valid ")
+                    if(!isPasswordValid){
+                      if (user.passwordTries === 1) {
+                        user.passwordTries -= 1
+                        user.invalidPasswordTries = Date.now() + 180 * 60 * 1000
+                        await user.save({validateBeforeSave:false})
+                      throw new Error("Password not valid ")
+                        
+                      }
+                      await user.save({validateBeforeSave:false})
+                      throw new Error("Password not valid ")
+                    }
                     if (user.refreshToken) {
                       if (new Date() < user.refreshTokenExpiry) {
                         const newRefreshToken =   await createNewRefeshToken();
@@ -64,7 +75,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       const expiresAt  = token.expiresAt  as Date ;
                       
                       if (new Date() <new Date(expiresAt )) {
-                        console.log("return")
                         return token;
                       }
                      else  {

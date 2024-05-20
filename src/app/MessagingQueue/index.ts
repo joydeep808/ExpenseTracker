@@ -7,11 +7,11 @@
 
 
 
-import { WelcomeEmailSend, emailVerificationEmailProducer, passwordResetEmail, sendEmail } from "@/app/api/SendMail"
+import { WelcomeEmailSend, passwordResetEmail, sendEmail } from "@/app/api/SendMail"
 import {Queue, Worker} from "bullmq"
 
 const {host ,  password , port} = {
-  host:process.env.REDIS_USERNAME,
+  host:process.env.REDIS_HOST,
   password:process.env.REDIS_PASSWORD,
   port:process.env.REDIS_PORT
 }
@@ -32,7 +32,7 @@ const WelcomUserQueue = new Queue("WelcomeUserQueue" , {
     port
   }
 })
-const OTPVerificationQueue = new Queue("OTPVerificationQueue" , {
+const OTPVerificationQueue = new Queue("OTPVerificationQueue" , {  
   connection:{
     host,
     password,

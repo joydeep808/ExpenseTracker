@@ -19,6 +19,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { z } from "zod"
+import { UserSignin } from "./Signin"
  function Page() {
   const navigate = useRouter()
   const [isLoading , setisLoading] = useState(false)
@@ -35,29 +36,21 @@ import { z } from "zod"
     // fetch("")
  try {
   setisLoading(true)
- const result =  await signIn("credentials" , {
-      redirect:false,
-      identifier:values.identifier,
-      password:values.password
-    })
-    console.log(result)
-   if (result?.error === "Configuration") {
-    toast.error("Email or password not valid")
+ const result =  await UserSignin(values)
+   if (result.success === false) {
+    toast.error(result.err)
    }
    else {
     toast.success("Login successfully done")
-
-    navigate.push("/dashboard")
+    navigate.replace("/dashboard")
    }
  } catch (error) {
   setisLoading(false)
-  console.log("error",error )
  }
  finally
  {
   setisLoading(false)
  }
-    // 
   }
   return (
     <div className="flex justify-center items-center min-h-screen">

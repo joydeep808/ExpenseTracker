@@ -1,6 +1,6 @@
 
 "use client"
-import { IExpense, TExpenseCategoryDetails, useStore } from '@/app/Store'
+import { TExpenseCategoryDetails, useStore } from '@/app/Store'
 import React, { useEffect, useState } from 'react'
 import { getAllExpences, getFilterExpense } from './getAllExpences'
 import toast from 'react-hot-toast'
@@ -36,10 +36,11 @@ import { Data } from './Expense/Data'
          }
          else{
            toast.success(allExpences.message)
-           addExpenses(allExpences.data)
-          await addTotalCategoryItem(allExpences.data.length)
+           const FoundExpenses =await JSON.parse(allExpences.data)
+          addExpenses(FoundExpenses)
+          addTotalCategoryItem(FoundExpenses.length)
            const arr:TExpenseCategoryDetails[] = []
-           allExpences.data.map((item:TExpense)=>{
+          await FoundExpenses.map((item:TExpense)=>{
            const foundCategory =   arr.find(e=>e.expenseCategory === item.expenseCategory)
            if (foundCategory === undefined) {
              arr.push({addedCategory:1 , expenseCategory:item.expenseCategory})
@@ -50,17 +51,17 @@ import { Data } from './Expense/Data'
              
            })
           changeAlreadyFetched(true)
-         await addCategoryDetails(arr)
-         setIsFetched(true)
+        addCategoryDetails(arr)
          }
        }
        fetchAllExpences()
-      //  changeAlreadyFetched(true)
      }
    } catch (error) {
+
     
    }
    finally{
+
    }
   },[])
  
