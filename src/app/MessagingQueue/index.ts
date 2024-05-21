@@ -7,9 +7,8 @@
 
 
 
-import { WelcomeEmailSend, passwordResetEmail, sendEmail } from "@/app/api/SendMail"
+import { sendEmail ,WelcomeEmailSend ,emailVerificationEmailProducer , passwordResetEmail} from "@/helpers/SendMail"
 import {Queue, Worker} from "bullmq"
-
 const {host ,  password , port} = {
   host:process.env.REDIS_HOST,
   password:process.env.REDIS_PASSWORD,
@@ -53,8 +52,10 @@ export const OTPVerificationWorker = async(email:string , name:string , resetLin
      email , name , resetLink
   })
 }
-export const forgotPasswordWorker =async(data:{email:string , resetLink:string , name:string})=>{
-  await forGotPasswordQueue.add("forgotPassword" , {...data})
+export const forgotPasswordWorker =async(email:string , resetLink:string , name:string)=>{
+  await forGotPasswordQueue.add("forgotPassword" , {
+    email , resetLink , name
+  })
 }
 new Worker("WelcomeUserQueue",async(data)=>{
   

@@ -109,12 +109,12 @@ export const  emailVerificationEmailProducer= (name:string , Otp:string ) => {
 export const  passwordResetEmail= (name:string , resetLink:string ) => {
 return ` 
 <h1 style="text-align:center; color:black;">Hello ${name}</h1>
-<h3 style=color:#525f7f>Welcome to our website ${name} ! We're very excited to have you on board</h3>.
-<hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#e6ebf1;margin:20px 0" />
+<h3 style=color:#525f7f>Welcome to our website ${name} ! We're very excited to have you on board</h3>
 <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#e6ebf1;margin:20px 0" />
 <p style="font-size:16px;line-height:24px;margin:16px 0;color:#525f7f;text-align:left">Thanks you for using our services </p>
 <p style="font-size:16px;line-height:24px;margin:16px 0;color:#525f7f;text-align:left">Please reset your password </p>
 
+<a href=${`${websiteUrl}/forgot-password/${resetLink}`} style="background-color:#656ee8;border-radius:5px;color:#fff;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;display:inline-block;width:95%;padding:10px 10px 10px 10px;line-height:100%;max-width:100%" target="_blank"><span><!--[if mso]><i style="letter-spacing: 10px;mso-font-width:-100%;mso-text-raise:15" hidden>&nbsp;</i><![endif]--></span><span style="max-width:95%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:7.5px">Reset your password</span><span><!--[if mso]><i style="letter-spacing: 10px;mso-font-width:-100%" hidden>&nbsp;</i><![endif]--></span></a>
 
 
 <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#e6ebf1;margin:20px 0" />
@@ -126,7 +126,6 @@ return `
 <p style="font-size:16px;line-height:24px;margin:16px 0;color:#525f7f;text-align:left">— ${websiteName} </p>
 <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#e6ebf1;margin:20px 0" />
 <p style="font-size:12px;line-height:16px;margin:16px 0;color:#8898aa">${websiteName} Agartala Tripura West </p>
-<a href=${`${websiteName}/forgot-password/${resetLink}`} style="background-color:#656ee8;border-radius:5px;color:#fff;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;display:inline-block;width:100%;padding:10px 10px 10px 10px;line-height:100%;max-width:100%" target="_blank"><span><!--[if mso]><i style="letter-spacing: 10px;mso-font-width:-100%;mso-text-raise:15" hidden>&nbsp;</i><![endif]--></span><span style="max-width:95%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:7.5px">Reset your password</span><span><!--[if mso]><i style="letter-spacing: 10px;mso-font-width:-100%" hidden>&nbsp;</i><![endif]--></span></a>
 <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#e6ebf1;margin:20px 0" />
 
         
