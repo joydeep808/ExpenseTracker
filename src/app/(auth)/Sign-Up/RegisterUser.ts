@@ -1,8 +1,6 @@
 "use server"
 import { DBConnection } from "@/DB"
-import { OTPGeneration } from "@/Util"
 import { ApiResponse } from "@/Util/ApiResponse"
-import { WelcomeEmailSend, sendEmail } from "@/app/api/SendMail"
 import { OTPVerificationWorker, WelcomeMessageWorker } from "@/app/MessagingQueue"
 import { User } from "@/models/User"
 import type { RegisterUser } from "@/types/TRegistration"
