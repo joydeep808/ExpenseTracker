@@ -140,14 +140,10 @@ import { signOut } from 'next-auth/react'
         <ExpenseCard Expenses={item} key={index}/>
       ))}</div>}
     </>
-    :
-    <>{Expenses.length === 0 ? <h1>Please add an expense</h1>:<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((_ , index)=>(
+    :<div className='ExpenseCard'>{[1,2,3,4,5,6,7].map((_ , index)=>(
       <Loading key={index}/> 
-   ))}</div>}  </> }
-
-   
-    </>
-
+   ))}</div>}
+</>
   )
 }
 

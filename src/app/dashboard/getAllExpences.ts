@@ -28,7 +28,6 @@ export async function getAllExpences ():Promise<TRegistrationResponse>{
    } 
    const User = Checkuser.userAuth?.user
    const redisPipeline =  RedisClient.pipeline();
-  await  redisPipeline.expire(`user_${User.email}` , 1).exec()
    const result  = await RedisClient.get(`user_${User.email}`);
    if (result !== null) {
     return new ApiResponse(200 , "Expeses found from redis" , true , result).response()
