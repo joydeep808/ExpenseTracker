@@ -25,6 +25,7 @@ import toast from "react-hot-toast"
 import Link from "next/link"
 import { useState } from "react"
 import { Spinner } from "@/components/ui/spinner"
+import { revalidatePath } from "next/cache"
 function Page() {
   const [isLoading , setisLoading] = useState(false)
 

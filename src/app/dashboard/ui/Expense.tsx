@@ -4,6 +4,8 @@ import type{ IExpense } from "../../Store"
 import { DeleteExpense } from "../Expense/ServerAction/DeleteExpense.ui"
 import { DeleteExpenseFromDB } from "../DeleteExpenses"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 interface expenseDetails{
   Expenses:IExpense
@@ -12,11 +14,14 @@ interface expenseDetails{
 
 
 export const  ExpenseCard:React.FC<expenseDetails> = (props:expenseDetails)=>{
+    const navigate = useRouter()
     const handleOnClick = async(id:string)=>{
       const Response =   await DeleteExpenseFromDB(id)
       if (!Response.success ) toast.error(Response.message)
-    else toast.success(Response.message)
+    else {
+        toast.success(Response.message)
     }
+}
     const {createdAt , expenseCategory , expenseMoney , _id } = props.Expenses
 return (
     <div className="container w-[350px] min-h-fit rounded-xl shadow-xl p-8 flex flex-col"> 

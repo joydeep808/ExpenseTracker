@@ -8,6 +8,7 @@ import { auth } from "@/auth";
 import { RedisClient, RedisHandler } from "@/helpers/Ratelimit";
 import { Expense } from "@/models/Expence";
 import { ZExpenseSchema } from "@/schemas/Expence.Schema";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 export async function addExpence (data:z.infer<typeof ZExpenseSchema>){
   const Checkuser  =  await RedisHandler()
