@@ -36,7 +36,7 @@ try {
 export const RedisHandler = async()=>{
   const userAuth = await getUserFromSession()
   if (!userAuth || userAuth?.isSuccess === null) {
-    await cookies().delete("__Secure-authjs.session-token")
+     cookies().delete("__Secure-authjs.session-token")
     return {success:false , err:"Invalid user"}
   }
   const userKey = userAuth.userSession.email

@@ -16,7 +16,7 @@ export interface TUser {
   accountLockedTime:Date
   role:string[]
   refreshToken:string
-  refreshTokenExpiry:Date
+  refreshTokenExpiry:number
 }
 
 const UserSchema = new Schema<TUser>({
@@ -80,7 +80,8 @@ const UserSchema = new Schema<TUser>({
     type:"String"
   },
   refreshTokenExpiry:{
-    type:Date
+    type:Number,
+    
   },
   role:{
     type:[String],

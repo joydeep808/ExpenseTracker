@@ -8,7 +8,6 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      // if (!auth || !auth.user || new Date(auth.expires) < new Date()) return Response.redirect("/sign-in")
       const isLoggedIn = !!auth?.user;
       const userInfo = auth?.user
       const url = nextUrl

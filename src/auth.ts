@@ -37,6 +37,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       await user.save({validateBeforeSave:false})
                       throw new Error("Password not valid ")
                     }
+                    if (user.refreshToken) {
+                      
+                    }
                       const newRefreshToken =await createNewRefeshToken();
                       user.forgotPasswordTries = 5
                         user.forgotPasswordStop = Date.now()
@@ -63,17 +66,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       user.role ?  token.role = user.role :["USER"]
                       user.refreshToken?  token.refreshToken = user.refreshToken  :""
                       token.expiresAt =setAccessTokenExpires()
-                      // token.exp  = setRefreshTokenExpiry
-                      
+                      token.exp = user.refreshTokenExpiry
                       } 
-
+                      if (token.exp && Date.now()>  token.exp) {
+                        throw new Error("Token expired please login")
+                      }
                       const expiresAt  = token.expiresAt  as Date ;
-                      
                       if (new Date() <new Date(expiresAt )) {
                         return token;
                       }
                      else  {
-
                       await DBConnection()
                       const foundUser = await User.findById(token._id)
                       if (!foundUser) {
@@ -84,7 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       }
                       if (foundUser.refreshToken === token.refreshToken) {
                         
-                        if (new Date()> foundUser.refreshTokenExpiry) {
+                        if (Date.now()> foundUser.refreshTokenExpiry) {
                           throw new Error("Refresh Token expired")
                         }
                        else  {

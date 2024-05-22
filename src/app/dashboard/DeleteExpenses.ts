@@ -15,12 +15,12 @@ export const DeleteExpenseFromDB = async(id:string):Promise<TRegistrationRespons
     if (Checkuser.err ===  "Invalid user") return new ApiResponse(401 , "Please login" ,false).response()
     else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
    } 
-   const User = Checkuser.userAuth?.user
+   const User = Checkuser.userAuth
    await DBConnection()
-  const isDelete =  await Expense.deleteOne({$and:[{user:User.email} , {_id:id}]})
+  const isDelete =  await Expense.deleteOne({$and:[{user:User?.email} , {_id:id}]})
   if (!isDelete) return new ApiResponse(404 , "Expesnse not found to delete" , false).response()
    else {
-    await RedisClient.expire(`user_${User.email}` , 1)
+    await RedisClient.expire(`user_${User?.email}` , 1)
    return new ApiResponse(404 , "Delete successfully done" , true).response()
   }
 

@@ -1,9 +1,6 @@
 "use server"
 import { auth } from "@/auth"
 import { SessionUser } from "@/types/index.types"
-
-
-
 let  userSession:SessionUser = {
   _id:"" , 
   email :"",

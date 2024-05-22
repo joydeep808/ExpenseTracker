@@ -10,6 +10,7 @@ declare module 'next-auth'{
       name:string
       role:string[]
       refreshToken:string
+      refreshTokenExpiry:number
       expiresAt:number
 
     } & DefaultSession["user"]
@@ -21,6 +22,7 @@ declare module 'next-auth'{
       name:string
       refreshToken:string
       expiresAt:number
+      refreshTokenExpiry:number
       role:string[]
   }
   interface JWT{
@@ -31,6 +33,9 @@ declare module 'next-auth'{
     role:string[]
     refreshToken:string
     expiresAt:number
+    refreshTokenExpiry:number
+
+
 
   }
 }

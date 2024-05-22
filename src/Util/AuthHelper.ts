@@ -9,9 +9,7 @@ export const setAccessTokenExpires  = ()=>{
   return time
 }
 export const setRefreshTokenExpiry = ()=>{
-  const currentDate = new Date()
-  currentDate.setDate(currentDate.getDate() + 30)
-  return currentDate
+  return Date.now() + 24 * 60 * 1000 * 30
 }
 
 export const createNewRefeshToken = ()=>{
@@ -31,7 +29,7 @@ export const checkTheRefreshToken = async(token:any)=>{
   }
   if (foundUser.refreshToken === token.refreshToken) {
     
-    if (new Date()> foundUser.refreshTokenExpiry) {
+    if (Date.now()> foundUser.refreshTokenExpiry) {
       throw new Error("Refresh Token expired")
     }
    else  {
