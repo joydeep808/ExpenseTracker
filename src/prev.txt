@@ -1,34 +1,50 @@
-
-import { ApiResponse } from '@/Util/ApiResponse'
-import { getUserFromSession } from '@/app/catch'
-import { auth } from '@/auth'
-/// i have to store the user id and and the counter 
-/// if the user excedeed the limit within the counter than the user request is not able to respond 
-/// else continue and request limit increase by 1 for the user 
+"use server"
+import { auth } from "@/auth"
+import { SessionUser } from "@/types/index.types"
 
 
 
-import ioRedis, { Redis, RedisOptions } from 'ioredis'
-import { cookies } from 'next/headers'
-
-
-const Options:RedisOptions ={
-  host:process.env.REDIS_HOST,
-  password:process.env.REDIS_PASSWORD,
-  port:process.env.REDIS_PORT
+let  userSession:SessionUser = {
+  _id:"" , 
+  email :"",
+  expiresAt:0,
+  isVerifyed:false,
+  name:"",
+  refreshToken:"",
+   role:["USER"],
+}
+export const getUserFromSession = async()=>{
+   console.log("email",userSession.email)
+ 
+   if (userSession.email === "") {
+     const userAuth  = await auth() as SessionUser |null
+     if (!userAuth) return {isSuccess:false , userSession}
+ 
+     userSession._id = userAuth._id,
+     userSession.email = userAuth.email,
+     userSession.role = userAuth.role,
+     userSession.refreshToken = userAuth.refreshToken,
+     userSession.expiresAt = userAuth.expiresAt,
+     userSession.isVerifyed = userAuth.isVerifyed
+     console.log("userSession set" )
+     return {isSuccess:true , userSession}
+ 
+   }
+   if (new Date(userSession.expiresAt) < new Date()) {
+    console.log("new token assigned")
+     const userAuth  = await auth()
+     if (!userAuth) return null
+     userSession = userAuth.user
+     return {isSuccess:true , userSession}
+   }
+   console.log("directly return")
+   return {isSuccess:true , userSession}
+ 
+ 
 }
 
 
-
-export  let RedisClient:Redis
-try {
-    RedisClient =  new Redis({
-    ...Options
-  })
-  console.log("Redis connection done")
-} catch (error) {
-  process.exit(1)
-}
+////
 
 
 
@@ -48,7 +64,7 @@ export const RedisHandler = async()=>{
   await pipeline.exec()
   return {success:null , userAuth:userAuth.userSession}
  }
- if (Number(foundUser) > 5) {
+ if (Number(foundUser) > 20) {
   return {success:false , err:"Limit Excedeed" }
  }
  else {

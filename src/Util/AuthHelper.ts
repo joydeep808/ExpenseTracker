@@ -5,7 +5,7 @@ import crypto, { randomUUID } from 'crypto'
 import { JWT } from 'next-auth'
 
 export const setAccessTokenExpires  = ()=>{
-  const time = new Date( Date.now() + 2 * 60 * 1000)
+  const time = new Date( Date.now() + .2 * 60 * 1000)
   return time
 }
 export const setRefreshTokenExpiry = ()=>{

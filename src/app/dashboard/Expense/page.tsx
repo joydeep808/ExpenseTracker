@@ -51,7 +51,6 @@ function Page() {
       }
       else {
         toast.success(Response.message)
-        
       }
      }
     } catch (error) {

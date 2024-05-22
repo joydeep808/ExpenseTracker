@@ -11,3 +11,15 @@ export interface CustomError extends Error {
     err?: {};
   };
 }
+
+
+export  interface SessionUser{
+  email:string , 
+  name:string , 
+  _id:string , 
+  isVerifyed:boolean , 
+  role:[string]  , 
+  refreshToken:string , 
+  expiresAt:number
+
+}

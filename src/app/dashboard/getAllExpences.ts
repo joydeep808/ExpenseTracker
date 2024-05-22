@@ -26,9 +26,9 @@ export async function getAllExpences ():Promise<TRegistrationResponse>{
       }
     else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
    } 
-   const User = Checkuser.userAuth?.user
+   const User = Checkuser.userAuth
    const redisPipeline =  RedisClient.pipeline();
-   const result  = await RedisClient.get(`user_${User.email}`);
+   const result  = await RedisClient.get(`user_${User?.email}`);
    if (result !== null) {
     return new ApiResponse(200 , "Expeses found from redis" , true , result).response()
    }
@@ -37,7 +37,7 @@ export async function getAllExpences ():Promise<TRegistrationResponse>{
   const allExpences = await Expense.aggregate([
     {
       $match:{
-        user:User.email
+        user:User?.email
       }
     },
     {
@@ -53,8 +53,8 @@ export async function getAllExpences ():Promise<TRegistrationResponse>{
     return new ApiResponse(404 , "No Expence found", false ).response()
   }
   const refineObjects = JSON.stringify(allExpences)
-  redisPipeline.set(`user_${User.email}` , refineObjects)
-  redisPipeline.expire(`user_${User.email}` , 60)
+  redisPipeline.set(`user_${User?.email}` , refineObjects)
+  redisPipeline.expire(`user_${User?.email}` , 60)
   await redisPipeline.exec()
   return new ApiResponse(404 , "Expences found", true , refineObjects).response()
 

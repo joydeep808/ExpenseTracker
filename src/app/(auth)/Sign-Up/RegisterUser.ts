@@ -6,13 +6,11 @@ import { User } from "@/models/User"
 import type { RegisterUser } from "@/types/TRegistration"
 import { TRegistrationResponse } from "@/types/index.types"
 import { hashSync } from "bcrypt"
-import { NextRequest } from "next/server"
 
 
 
 
 export const RegisterUserInDB = async(values:RegisterUser):Promise<TRegistrationResponse>=>{
-  const Req = NextRequest
   try {
     await DBConnection()
     const {email , name , password , phone}= values
@@ -53,3 +51,6 @@ export const RegisterUserInDB = async(values:RegisterUser):Promise<TRegistration
    return  new ApiResponse(200 , "Server Problem",false ,message ).response()
   }
 }
+
+
+

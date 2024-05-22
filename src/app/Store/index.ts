@@ -1,4 +1,5 @@
 
+import type { Session } from 'next-auth'
 import { create } from 'zustand'
 export interface IExpense {
   description:string
@@ -10,6 +11,7 @@ export interface IExpense {
   createdAt:string
   updatedAt:string
 }
+
 export type TExpenseCategoryDetails = {
   expenseCategory:string,
   addedCategory:number
@@ -19,7 +21,8 @@ type store = {
   alreadyFetched:boolean
   categoryDetails:TExpenseCategoryDetails[]
   totalCategoryItem:number
-  FilterExpense:IExpense[]
+  FilterExpense:IExpense[],
+
 }
 type actions = {
   addExpenses:(Expense:IExpense[])=> void
@@ -37,6 +40,9 @@ export const useStore = create<store & actions>((set)=>({
 totalCategoryItem:0,
 FilterExpense:[],
   categoryDetails:[],
+
+
+  ///actions
   addExpenses:(Expense:IExpense[])=>set((state)=>({
     Expenses:[
       ...state.Expenses,
@@ -57,6 +63,7 @@ FilterExpense:[],
   })),
    addFilterExpenses:(Expense:IExpense[])=>set((prev)=>({
     FilterExpense:[...Expense]
-   }))
+   })),
+  
   
 }))

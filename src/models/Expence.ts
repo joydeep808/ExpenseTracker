@@ -7,6 +7,7 @@ export interface TExpense  {
   expenseMoney : number
   isMoneyRefundable : boolean
   description:string
+  expenseDate:String
   createdAt:Date
   updatedAt:Date
   accountDetails:string
@@ -48,6 +49,9 @@ export const ExpenseSchema =new Schema<TExpense>({
     type:String,
   },
   accountDetails:{
+    type:"String"
+  },
+  expenseDate:{
     type:"String"
   },
   refundDate:{

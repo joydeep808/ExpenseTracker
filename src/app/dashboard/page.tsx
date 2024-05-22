@@ -37,7 +37,6 @@ import { signOut } from 'next-auth/react'
      else {
        const fetchAllExpences = async()=>{
          const allExpences = await getAllExpences()
-         console.log(allExpences)
          if (!allExpences || !allExpences.success )  {
            toast.error(allExpences?.message || "Something went wrong")
            if (allExpences.message === "Please login") {

@@ -16,18 +16,18 @@ export async function addExpence (data:z.infer<typeof ZExpenseSchema>){
    if (Checkuser.err ===  "Invalid user") return new ApiResponse(401 , "Please login" ,false).response()
    else return new ApiResponse(401 , "You have reached your limit please" ,false).response()
   } 
-  const UserAuth = Checkuser.userAuth?.user
+  const UserAuth = Checkuser.userAuth
   await DBConnection()
   try {
     const newExpense = await Expense.create({
-      user:UserAuth.email,
+      user:UserAuth?.email,
       expenseMoney:data.expenseMoney,
       expenseCategory:data.expenseCategory,
       isMoneyRefundable:data.isMoneyRefundable,
       description:data.description
     })
     await newExpense.save()
-    await RedisClient.expire(`user_${UserAuth.email}` , 1)
+    await RedisClient.expire(`user_${UserAuth?.email}` , 1)
     return new ApiResponse(200 , "Expense saved successfully done" , true).response()
   } catch (error) {
     if (error instanceof Error) {

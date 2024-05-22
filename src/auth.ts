@@ -63,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                       user.role ?  token.role = user.role :["USER"]
                       user.refreshToken?  token.refreshToken = user.refreshToken  :""
                       token.expiresAt =setAccessTokenExpires()
+                      // token.exp  = setRefreshTokenExpiry
                       
                       } 
 
